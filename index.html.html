@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#fff3dc">
+<title>飯後潔牙集點樂</title>
+
+<style>
+:root {
+  --canvas: #fff3dc;
+  --paper: #ffffff;
+  --powder: #ffe7c7;
+  --powder-soft: #fff9ed;
+  --sky: #86d8ec;
+  --sky-soft: #e6f8fb;
+  --indigo: #8c79d9;
+  --indigo-soft: #eee9ff;
+  --primary: #cc4352;
+  --primary-dark: #a93645;
+  --primary-soft: #ffe2e3;
+  --green: #23856b;
+  --green-soft: #e3f7ef;
+  --amber: #9a6400;
+  --amber-soft: #fff0bd;
+  --red: #b83957;
+  --red-soft: #ffe3ea;
+  --orange: #f28c52;
+  --yellow: #f7c948;
+  --ink: #463544;
+  --soft-ink: #665566;
+  --muted: #887584;
+  --line: #ead8cc;
+  --glass: rgba(255,255,255,.84);
+  --shadow: 0 22px 60px rgba(142,88,70,.16);
+  --shadow-soft: 0 12px 28px rgba(142,88,70,.11);
+  --radius-xl: 38px;
+  --radius-lg: 28px;
+  --radius-md: 20px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+input, select, textarea {
+  max-width: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Microsoft JhengHei", "Noto Sans TC",
+    system-ui, sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 8% 10%,
+      rgba(247,201,72,.38), transparent 25%),
+    radial-gradient(circle at 92% 12%,
+      rgba(242,140,82,.26), transparent 28%),
+    radial-gradient(circle at 52% 96%,
+      rgba(89,195,165,.22), transparent 32%),
+    linear-gradient(135deg,#fff0d2 0%,#fff9ed 48%,#ffe8dc 100%);
+  background-attachment: fixed;
+}
+
+button, input {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.container {
+  width: min(1180px, calc(100% - 32px));
+  margin: auto;
+  padding: 26px 0 60px;
+}
+
+/* 頂部導覽列 */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  margin-bottom: 24px;
+  border-radius: 999px;
+  background: var(--glass);
+  border: 2px solid rgba(255,255,255,.92);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 19px;
+  font-weight: 950;
+}
+
+.logo {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 16px;
+  color: white;
+  font-size: 24px;
+  background: linear-gradient(135deg,var(--primary-dark),var(--primary));
+  box-shadow: 0 12px 24px rgba(204,67,82,.25);
+  transform: rotate(-5deg);
+}
+
+.menu {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.menu a {
+  text-decoration: none;
+  color: var(--soft-ink);
+  padding: 9px 13px;
+  border-radius: 999px;
+}
+
+.menu a:hover {
+  background: var(--amber-soft);
+  color: var(--primary);
+}
+
+/* 首頁主視覺 */
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 22px;
+  margin-bottom: 24px;
+}
+
+.hero-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 350px;
+  padding: clamp(25px,5vw,48px);
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(135deg,
+      rgba(255,255,255,.94),
+      rgba(255,255,255,.68)),
+    linear-gradient(135deg,
+      rgba(247,201,72,.26),
+      rgba(242,140,82,.20),
+      rgba(89,195,165,.18));
+  border: 2px solid white;
+  box-shadow: var(--shadow);
+}
+
+.hero-card::before {
+  content: "☀️";
+  position: absolute;
+  right: 16px;
+  top: 10px;
+  font-size: 100px;
+  opacity: .35;
+  transform: rotate(15deg);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.label {
+  display: inline-block;
+  padding: 9px 15px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  color: var(--amber);
+  background: var(--amber-soft);
+  font-size: 14px;
+  font-weight: 950;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(34px,5.5vw,58px);
+  line-height: 1.2;
+}
+
+.accent-text {
+  background: linear-gradient(
+    90deg,var(--primary-dark),var(--primary),var(--orange));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.hero-content p {
+  max-width: 570px;
+  margin: 18px 0 0;
+  color: var(--soft-ink);
+  line-height: 1.9;
+  font-size: 17px;
+}
+
+.right-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.weather-card,
+.notice-card {
+  padding: 22px;
+  border-radius: var(--radius-xl);
+  background: rgba(255,255,255,.82);
+  border: 1px solid white;
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.weather-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  background: linear-gradient(
+    135deg,rgba(255,240,189,.95),rgba(255,255,255,.8));
+}
+
+.weather-card h2,
+.notice-card h2 {
+  margin: 0;
+  font-size: 23px;
+}
+
+.weather-card p,
+.notice-card p {
+  color: var(--soft-ink);
+  line-height: 1.75;
+  margin: 8px 0 0;
+}
+
+.sun {
+  width: 85px;
+  height: 85px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%,
+    #fff7ad,#facc15 58%,#fb923c);
+  box-shadow: 0 16px 32px rgba(250,204,21,.34);
+  font-size: 48px;
+}
+
+.notice-list {
+  display: grid;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.notice-item {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 12px;
+  align-items: center;
+  padding: 11px;
+  border-radius: 18px;
+  background: rgba(255,255,255,.78);
+  border: 1px solid var(--line);
+}
+
+.date-box {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 15px;
+  color: white;
+  font-weight: 950;
+  background: linear-gradient(135deg,var(--primary-dark),var(--primary));
+}
+
+.notice-item b {
+  display: block;
+  font-size: 14px;
+}
+
+.notice-item span {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* 共用區塊 */
+.section {
+  padding: 26px;
+  margin-bottom: 24px;
+  border-radius: var(--radius-xl);
+  background: var(--glass);
+  border: 2px solid rgba(255,255,255,.92);
+  box-shadow: var(--shadow-soft);
+  backdrop-filter: blur(18px);
+}
+
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 27px;
+}
+
+.section-desc {
+  margin: 7px 0 0;
+  color: var(--soft-ink);
+  line-height: 1.75;
+}
+
+/* 統計卡片 */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.stat-card {
+  position: relative;
+  overflow: hidden;
+  min-height: 135px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 19px;
+  border-radius: 24px;
+  color: white;
+  box-shadow: var(--shadow-soft);
+}
+
+.stat-card::after {
+  content: "";
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  right: -30px;
+  bottom: -40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.22);
+}
+
+.stat-card.one {
+  background: linear-gradient(135deg,#a93645,#cc4352);
+}
+
+.stat-card.two {
+  background: linear-gradient(135deg,#1f6f59,#23856b);
+}
+
+.stat-card.three {
+  background: linear-gradient(135deg,#6f5dbd,#8c79d9);
+}
+
+.stat-card span,
+.stat-card strong {
+  position: relative;
+  z-index: 1;
+}
+
+.stat-card span {
+  font-weight: 900;
+}
+
+.stat-card strong {
+  font-size: 39px;
+  line-height: 1.2;
+}
+
+/* 新增學生 */
+.add-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.text-input {
+  width: 100%;
+  min-width: 0;
+  padding: 14px 17px;
+  border: 2px solid var(--line);
+  border-radius: 18px;
+  background: white;
+  color: var(--ink);
+  font-size: 16px;
+  outline: none;
+}
+
+.text-input:focus {
+  border-color: var(--sky);
+  box-shadow: 0 0 0 4px rgba(134,216,236,.22);
+}
+
+/* 按鈕 */
+.btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  padding: 13px 19px;
+  border: 0;
+  border-radius: 999px;
+  color: white;
+  background: linear-gradient(135deg,var(--primary),var(--primary-dark));
+  box-shadow: 0 12px 23px rgba(204,67,82,.23);
+  font-weight: 950;
+  transition: transform .2s ease,filter .2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.05);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn.light {
+  color: var(--primary-dark);
+  background: white;
+  border: 2px solid rgba(204,67,82,.2);
+  box-shadow: var(--shadow-soft);
+}
+
+.btn.green {
+  background: linear-gradient(135deg,#23856b,#176b55);
+}
+
+.btn.small {
+  padding: 9px 13px;
+  font-size: 13px;
+}
+
+.btn.danger {
+  color: var(--red);
+  background: var(--red-soft);
+  box-shadow: none;
+}
+
+button:focus-visible,
+input:focus-visible,
+a:focus-visible {
+  outline: 3px solid rgba(204,67,82,.5);
+  outline-offset: 3px;
+}
+
+/* 學生卡片 */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 16px;
+}
+
+.student-card {
+  min-width: 0;
+  padding: 20px;
+  border-radius: 25px;
+  background: rgba(255,255,255,.9);
+  border: 1px solid white;
+  box-shadow: var(--shadow-soft);
+}
+
+.student-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.student-name {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: 20px;
+  font-weight: 950;
+}
+
+.avatar {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  background: var(--sky-soft);
+  font-size: 27px;
+}
+
+.student-profile {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.points-display {
+  padding: 14px;
+  margin-bottom: 15px;
+  border-radius: 18px;
+  background: var(--amber-soft);
+  text-align: center;
+}
+
+.points-number {
+  color: var(--primary-dark);
+  font-size: 38px;
+  font-weight: 950;
+}
+
+.points-label {
+  color: var(--amber);
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.task-list {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.task-check {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  padding: 12px;
+  border-radius: 16px;
+  background: var(--powder-soft);
+  border: 1px solid var(--line);
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.task-check input {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--green);
+  flex: 0 0 auto;
+}
+
+.claim-btn {
+  width: 100%;
+  min-height: 48px;
+  font-size: 15px;
+}
+
+.claim-btn:disabled {
+  cursor: not-allowed;
+  opacity: .48;
+  filter: grayscale(.3);
+  transform: none;
+  box-shadow: none;
+}
+
+.card-status {
+  margin-top: 11px;
+  padding: 9px;
+  border-radius: 14px;
+  background: var(--green-soft);
+  color: var(--green);
+  font-size: 13px;
+  font-weight: 900;
+  text-align: center;
+}
+
+.card-status.pending {
+  color: var(--amber);
+  background: var(--amber-soft);
+}
+
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 35px 15px;
+  border: 2px dashed var(--line);
+  border-radius: 22px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.8;
+}
+
+.empty-state .emoji {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 48px;
+}
+
+/* 進度與紀錄 */
+.progress-wrap {
+  padding: 19px;
+  border-radius: 22px;
+  background: var(--sky-soft);
+}
+
+.progress-title {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 900;
+}
+
+.progress {
+  height: 15px;
+  margin-top: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #d1e9ec;
+}
+
+.progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg,#23856b,#59c3a5,#f7c948);
+  transition: width .3s ease;
+}
+
+.record-list {
+  display: grid;
+  gap: 9px;
+}
+
+.record-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 17px;
+  background: var(--powder-soft);
+  border: 1px solid var(--line);
+}
+
+.record-item strong {
+  overflow-wrap: anywhere;
+}
+
+.record-item span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.record-point {
+  color: var(--green);
+  font-weight: 950;
+  white-space: nowrap;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 17px;
+}
+
+.message {
+  display: none;
+  padding: 13px 16px;
+  margin-bottom: 15px;
+  border-radius: 17px;
+  font-weight: 850;
+  line-height: 1.7;
+}
+
+.message.show {
+  display: block;
+}
+
+.message.success {
+  color: var(--green);
+  background: var(--green-soft);
+}
+
+.message.error {
+  color: var(--red);
+  background: var(--red-soft);
+}
+
+.footer {
+  padding: 20px;
+  color: var(--muted);
+  text-align: center;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 620px) {
+  .container {
+    width: calc(100% - 20px);
+    padding-top: 15px;
+  }
+
+  .topbar {
+    border-radius: 23px;
+    padding: 12px 15px;
+  }
+
+  .menu {
+    display: none;
+  }
+
+  .brand {
+    font-size: 16px;
+    min-width: 0;
+  }
+
+  .hero-card {
+    min-height: auto;
+    border-radius: 28px;
+  }
+
+  .section {
+    padding: 17px;
+    border-radius: 27px;
+  }
+
+  .stats {
+    grid-template-columns: 1fr;
+  }
+
+  .stat-card {
+    min-height: 105px;
+  }
+
+  .student-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .add-row {
+    grid-template-columns: 1fr;
+  }
+
+  .add-row .btn {
+    width: 100%;
+  }
+
+  .section-head {
+    align-items: flex-start;
+  }
+
+  .toolbar .btn {
+    flex: 1 1 100%;
+  }
+
+  .record-item {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .brand {
+    font-size: 14px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  .student-card {
+    padding: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,*::before,*::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<main class="container">
+
+  <!-- 頂部導覽 -->
+  <nav class="topbar">
+    <div class="brand">
+      <div class="logo">🦷</div>
+      <span>飯後潔牙集點樂</span>
+    </div>
+    <div class="menu">
+      <a href="#students">學生集點</a>
+      <a href="#progress">班級進度</a>
+      <a href="#records">集點紀錄</a>
+    </div>
+  </nav>
+
+  <!-- 主視覺 -->
+  <section class="hero">
+    <div class="hero-card">
+      <div class="hero-content">
+        <div class="label">🌟 HAPPY TOOTH CHALLENGE</div>
+        <h1>
+          飯後刷牙<br>
+          <span class="accent-text">集點大挑戰！</span>
+        </h1>
+        <p>
+          吃飽飯、刷好牙，就能獲得一顆閃亮點數！
+          每天養成潔牙好習慣，讓牙齒健康又漂亮。
+        </p>
+      </div>
+    </div>
+
+    <aside class="right-panel">
+      <div class="weather-card">
+        <div>
+          <h2>☀️ 今日潔牙任務</h2>
+          <p>飯後記得刷牙，讓細菌沒有機會停留！</p>
+        </div>
+        <div class="sun">🪥</div>
+      </div>
+
+      <div class="notice-card">
+        <h2>📣 集點小規則</h2>
+        <div class="notice-list">
+          <div class="notice-item">
+            <div class="date-box">1</div>
+            <div>
+              <b>先吃飽飯</b>
+              <span>完成午餐或晚餐</span>
+            </div>
+          </div>
+          <div class="notice-item">
+            <div class="date-box">2</div>
+            <div>
+              <b>再認真刷牙</b>
+              <span>完成飯後潔牙任務</span>
+            </div>
+          </div>
+          <div class="notice-item">
+            <div class="date-box">3</div>
+            <div>
+              <b>領取一個點數</b>
+              <span>每位學生每天限領一次</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- 班級統計 -->
+  <section class="section">
+    <div class="section-head">
+      <div>
+        <h2>🏆 班級潔牙排行榜</h2>
+        <p class="section-desc">每天一點點，累積健康好習慣！</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat-card one">
+        <span>👧👦 參加學生</span>
+        <strong id="totalStudents">0</strong>
+      </div>
+      <div class="stat-card two">
+        <span>⭐ 全班累積點數</span>
+        <strong id="totalPoints">0</strong>
+      </div>
+      <div class="stat-card three">
+        <span>🎉 今日完成潔牙</span>
+        <strong id="todayCount">0</strong>
+      </div>
+    </div>
+  </section>
+
+  <!-- 學生集點 -->
+  <section class="section" id="students">
+    <div class="section-head">
+      <div>
+        <h2>👩‍🎓 學生潔牙集點區</h2>
+        <p class="section-desc">
+          輸入學生姓名，建立個人集點卡。
+        </p>
+      </div>
+    </div>
+
+    <div id="message" class="message" role="status" aria-live="polite"></div>
+
+    <form id="addForm" class="add-row">
+      <input
+        id="studentName"
+        class="text-input"
+        type="text"
+        maxlength="30"
+        placeholder="請輸入學生姓名..."
+        aria-label="學生姓名"
+        autocomplete="off"
+        required
+      >
+      <button class="btn" type="submit">➕ 新增學生</button>
+    </form>
+
+    <div id="studentGrid" class="student-grid"></div>
+  </section>
+
+  <!-- 班級進度 -->
+  <section class="section" id="progress">
+    <div class="section-head">
+      <div>
+        <h2>🌈 今日潔牙進度</h2>
+        <p class="section-desc">看看今天有多少同學完成任務！</p>
+      </div>
+    </div>
+
+    <div class="progress-wrap">
+      <div class="progress-title">
+        <span>今日完成率</span>
+        <span id="progressText">0%</span>
+      </div>
+      <div
+        class="progress"
+        role="progressbar"
+        aria-label="今日潔牙完成率"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow="0"
+        id="progressBar"
+      >
+        <span id="progressFill"></span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 集點紀錄 -->
+  <section class="section" id="records">
+    <div class="section-head">
+      <div>
+        <h2>📒 最近集點紀錄</h2>
+        <p class="section-desc">查看同學們的潔牙成果。</p>
+      </div>
+    </div>
+
+    <div id="recordList" class="record-list"></div>
+
+    <div class="toolbar">
+      <button class="btn light" id="exportBtn" type="button">
+        📥 匯出 CSV 紀錄
+      </button>
+      <button class="btn light" id="helpBtn" type="button">
+        💡 使用說明
+      </button>
+      <button class="btn danger" id="clearBtn" type="button">
+        🗑️ 清除全部資料
+      </button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    🦷 飯後潔牙集點樂｜天天刷牙，笑容更加分！<br>
+    學生資料只儲存在目前瀏覽器，不會傳送至外部網站。
+  </footer>
+
+</main>
+
+<script>
+"use strict";
+
+/* ==============================
+   資料管理：僅使用瀏覽器 localStorage
+================================ */
+
+const STORAGE_KEY = "toothbrushing_points_v1";
+
+let students = [];
+let records = [];
+
+const $ = id => document.getElementById(id);
+
+function todayKey() {
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function loadData() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if (saved) {
+      const data = JSON.parse(saved);
+
+      students = Array.isArray(data.students)
+        ? data.students.filter(s =>
+            s &&
+            typeof s.id === "string" &&
+            typeof s.name === "string"
+          )
+        : [];
+
+      records = Array.isArray(data.records)
+        ? data.records.filter(r =>
+            r &&
+            typeof r.studentId === "string" &&
+            typeof r.date === "string"
+          )
+        : [];
+    }
+  } catch (error) {
+    students = [];
+    records = [];
+    showMessage("讀取資料失敗，已載入空白資料。", "error");
+  }
+}
+
+function saveData() {
+  try {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({ students, records })
+    );
+    return true;
+  } catch (error) {
+    showMessage("資料儲存失敗，請檢查瀏覽器儲存空間。", "error");
+    return false;
+  }
+}
+
+/* ==============================
+   提示訊息
+================================ */
+
+let messageTimer;
+
+function showMessage(text, type = "success") {
+  const box = $("message");
+
+  box.textContent = text;
+  box.className = `message show ${type}`;
+
+  clearTimeout(messageTimer);
+
+  messageTimer = setTimeout(() => {
+    box.className = "message";
+    box.textContent = "";
+  }, 3500);
+}
+
+/* ==============================
+   學生管理
+================================ */
+
+function addStudent(name) {
+  const cleanName = name.trim();
+
+  if (!cleanName) {
+    showMessage("請先輸入學生姓名！", "error");
+    return false;
+  }
+
+  const duplicated = students.some(
+    s => s.name.toLowerCase() === cleanName.toLowerCase()
+  );
+
+  if (duplicated) {
+    showMessage("這位學生已經建立集點卡囉！", "error");
+    return false;
+  }
+
+  students.push({
+    id: createId(),
+    name: cleanName,
+    createdAt: new Date().toISOString()
+  });
+
+  saveData();
+  renderAll();
+  showMessage(`🎉 ${cleanName} 已加入潔牙集點樂！`);
+
+  return true;
+}
+
+function createId() {
+  return "student_" +
+    Date.now().toString(36) +
+    "_" +
+    Math.random().toString(36).slice(2, 9);
+}
+
+function deleteStudent(id) {
+  const student = students.find(s => s.id === id);
+
+  if (!student) return;
+
+  const confirmed = confirm(
+    `確定要移除「${student.name}」嗎？\n\n既有集點紀錄會保留。`
+  );
+
+  if (!confirmed) return;
+
+  students = students.filter(s => s.id !== id);
+
+  saveData();
+  renderAll();
+  showMessage("已移除學生集點卡。");
+}
+
+/* ==============================
+   集點邏輯
+================================ */
+
+function hasClaimedToday(studentId) {
+  return records.some(
+    r => r.studentId === studentId && r.date === todayKey()
+  );
+}
+
+function getStudentPoints(studentId) {
+  return records.filter(
+    r => r.studentId === studentId
+  ).length;
+}
+
+function claimPoint(studentId) {
+  const student = students.find(s => s.id === studentId);
+
+  if (!student) return;
+
+  const card = document.querySelector(
+    `[data-student-id="${CSS.escape(studentId)}"]`
+  );
+
+  if (!card) return;
+
+  const eaten = card.querySelector(".eaten-check").checked;
+  const brushed = card.querySelector(".brushed-check").checked;
+
+  if (!eaten || !brushed) {
+    showMessage("請先完成「已吃飽飯」及「已完成刷牙」兩項任務！", "error");
+    return;
+  }
+
+  if (hasClaimedToday(studentId)) {
+    showMessage(`${student.name} 今天已經領過點數囉！`, "error");
+    renderAll();
+    return;
+  }
+
+  const record = {
+    id: createId(),
+    studentId,
+    name: student.name,
+    date: todayKey(),
+    time: new Date().toLocaleTimeString("zh-TW", {
+      hour: "2-digit",
+      minute: "2-digit"
+    }),
+    points: 1
+  };
+
+  records.push(record);
+
+  if (!saveData()) {
+    records.pop();
+    return;
+  }
+
+  renderAll();
+  showMessage(`🎉 太棒了！${student.name} 獲得 1 點！`);
+
+  playSuccessSound();
+}
+
+/* ==============================
+   學生卡片畫面
+================================ */
+
+function renderStudents() {
+  const grid = $("studentGrid");
+  grid.replaceChildren();
+
+  if (students.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty-state";
+
+    const emoji = document.createElement("span");
+    emoji.className = "emoji";
+    emoji.textContent = "🦷";
+
+    const text = document.createElement("strong");
+    text.textContent = "目前還沒有學生喔！";
+
+    const hint = document.createElement("div");
+    hint.textContent = "請先輸入學生姓名，建立第一張潔牙集點卡。";
+
+    empty.append(emoji, text, hint);
+    grid.appendChild(empty);
+    return;
+  }
+
+  students.forEach((student, index) => {
+    const claimed = hasClaimedToday(student.id);
+    const points = getStudentPoints(student.id);
+
+    const card = document.createElement("article");
+    card.className = "student-card";
+    card.dataset.studentId = student.id;
+
+    const head = document.createElement("div");
+    head.className = "student-head";
+
+    const profile = document.createElement("div");
+    profile.className = "student-profile";
+
+    const avatar = document.createElement("div");
+    avatar.className = "avatar";
+    avatar.textContent = ["😊", "🐰", "🐻", "🐼", "🦊", "🐸"][index % 6];
+
+    const name = document.createElement("div");
+    name.className = "student-name";
+    name.textContent = student.name;
+
+    profile.append(avatar, name);
+
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.className = "btn danger small";
+    removeBtn.textContent = "移除";
+    removeBtn.setAttribute("aria-label", `移除 ${student.name}`);
+    removeBtn.addEventListener("click", () => deleteStudent(student.id));
+
+    head.append(profile, removeBtn);
+
+    const pointBox = document.createElement("div");
+    pointBox.className = "points-display";
+
+    const pointNumber = document.createElement("div");
+    pointNumber.className = "points-number";
+    pointNumber.textContent = `⭐ ${points}`;
+
+    const pointLabel = document.createElement("div");
+    pointLabel.className = "points-label";
+    pointLabel.textContent = "累積潔牙點數";
+
+    pointBox.append(pointNumber, pointLabel);
+
+    const taskList = document.createElement("div");
+    taskList.className = "task-list";
+
+    const eatenLabel = document.createElement("label");
+    eatenLabel.className = "task-check";
+
+    const eatenCheck = document.createElement("input");
+    eatenCheck.type = "checkbox";
+    eatenCheck.className = "eaten-check";
+    eatenCheck.disabled = claimed;
+
+    const eatenText = document.createElement("span");
+    eatenText.textContent = "🍚 我已經吃飽飯了";
+
+    eatenLabel.append(eatenCheck, eatenText);
+
+    const brushedLabel = document.createElement("label");
+    brushedLabel.className = "task-check";
+
+    const brushedCheck = document.createElement("input");
+    brushedCheck.type = "checkbox";
+    brushedCheck.className = "brushed-check";
+    brushedCheck.disabled = claimed;
+
+    const brushedText = document.createElement("span");
+    brushedText.textContent = "🪥 我已經完成刷牙";
+
+    brushedLabel.append(brushedCheck, brushedText);
+
+    taskList.append(eatenLabel, brushedLabel);
+
+    const claimBtn = document.createElement("button");
+    claimBtn.type = "button";
+    claimBtn.className = "btn green claim-btn";
+    claimBtn.textContent = claimed ? "✅ 今日已領取 1 點" : "🌟 領取 1 點";
+    claimBtn.disabled = claimed;
+
+    claimBtn.addEventListener("click", () => {
+      claimPoint(student.id);
+    });
+
+    const status = document.createElement("div");
+    status.className = claimed
+      ? "card-status"
+      : "card-status pending";
+
+    status.textContent = claimed
+      ? "🎉 今天的潔牙任務已完成！"
+      : "💡 完成兩項任務即可領取點數";
+
+    card.append(head, pointBox, taskList, claimBtn, status);
+    grid.appendChild(card);
+  });
+}
+
+/* ==============================
+   統計資料
+================================ */
+
+function renderStats() {
+  const totalPoints = records.reduce(
+    (sum, r) => sum + (Number(r.points) || 0),
+    0
+  );
+
+  const todayCount = records.filter(
+    r => r.date === todayKey()
+  ).length;
+
+  const percent = students.length
+    ? Math.round(todayCount / students.length * 100)
+    : 0;
+
+  $("totalStudents").textContent = students.length;
+  $("totalPoints").textContent = totalPoints;
+  $("todayCount").textContent = todayCount;
+
+  $("progressText").textContent = `${percent}%`;
+  $("progressFill").style.width = `${percent}%`;
+  $("progressBar").setAttribute("aria-valuenow", percent);
+}
+
+/* ==============================
+   最近紀錄
+================================ */
+
+function renderRecords() {
+  const list = $("recordList");
+  list.replaceChildren();
+
+  const latest = [...records]
+    .sort((a, b) => {
+      const timeA = `${a.date} ${a.time || ""}`;
+      const timeB = `${b.date} ${b.time || ""}`;
+      return timeB.localeCompare(timeA);
+    })
+    .slice(0, 15);
+
+  if (latest.length === 0) {
+    const empty = document.createElement("div");
+    empty.className = "empty-state";
+    empty.textContent = "🌟 還沒有集點紀錄，完成第一次潔牙任務就會出現在這裡！";
+    list.appendChild(empty);
+    return;
+  }
+
+  latest.forEach(record => {
+    const item = document.createElement("div");
+    item.className = "record-item";
+
+    const info = document.createElement("div");
+
+    const name = document.createElement("strong");
+    name.textContent = `🦷 ${record.name}`;
+
+    const date = document.createElement("div");
+    const timeText = record.time ? ` ${record.time}` : "";
+    date.textContent = `${record.date}${timeText}`;
+    date.style.color = "var(--muted)";
+    date.style.fontSize = "13px";
+    date.style.marginTop = "4px";
+
+    info.append(name, date);
+
+    const point = document.createElement("span");
+    point.className = "record-point";
+    point.textContent = `+${record.points || 1} ⭐`;
+
+    item.append(info, point);
+    list.appendChild(item);
+  });
+}
+
+function renderAll() {
+  renderStudents();
+  renderStats();
+  renderRecords();
+}
+
+/* ==============================
+   CSV 匯出
+================================ */
+
+function exportCSV() {
+  if (records.length === 0) {
+    showMessage("目前沒有集點紀錄可以匯出。", "error");
+    return;
+  }
+
+  const rows = [
+    ["學生姓名", "日期", "時間", "獲得點數"],
+    ...records.map(r => [
+      r.name,
+      r.date,
+      r.time || "",
+      r.points || 1
+    ])
+  ];
+
+  const csv = "\uFEFF" + rows.map(row =>
+    row.map(value => {
+      const safe = String(value).replace(/"/g, '""');
+      return `"${safe}"`;
+    }).join(",")
+  ).join("\r\n");
+
+  const blob = new Blob([csv], {
+    type: "text/csv;charset=utf-8;"
+  });
+
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = `潔牙集點紀錄_${todayKey()}.csv`;
+
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+
+  URL.revokeObjectURL(url);
+
+  showMessage("📥 集點紀錄已匯出！");
+}
+
+/* ==============================
+   清除資料
+================================ */
+
+function clearAll() {
+  if (students.length === 0 && records.length === 0) {
+    showMessage("目前沒有資料需要清除。", "error");
+    return;
+  }
+
+  const confirmed = confirm(
+    "確定要清除所有學生及集點紀錄嗎？\n\n此操作無法復原，建議先匯出 CSV 備份。"
+  );
+
+  if (!confirmed) return;
+
+  students = [];
+  records = [];
+
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    showMessage("清除資料時發生問題。", "error");
+    return;
+  }
+
+  renderAll();
+  showMessage("所有資料已清除。");
+}
+
+/* ==============================
+   使用說明
+================================ */
+
+function showHelp() {
+  alert(
+`🦷 飯後潔牙集點樂 使用說明
+
+一、新增學生
+輸入學生姓名，按下「新增學生」。
+
+二、完成潔牙任務
+1. 吃飽飯後勾選「我已經吃飽飯了」。
+2. 完成刷牙後勾選「我已經完成刷牙」。
+3. 按下「領取 1 點」。
+
+三、集點規則
+每位學生每天最多領取一次。
+隔天可以再次完成任務並領取點數。
+
+四、資料管理
+資料會保存在目前瀏覽器。
+可以匯出 CSV 備份。
+清除資料前請先確認是否需要備份。
+
+提醒：請老師依實際情況確認學生是否完成任務。`
+  );
+}
+
+/* ==============================
+   成功音效：使用者操作後才播放
+================================ */
+
+function playSuccessSound() {
+  try {
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
+
+    if (!AudioContextClass) return;
+
+    const context = new AudioContextClass();
+
+    const oscillator = context.createOscillator();
+    const gain = context.createGain();
+
+    oscillator.type = "sine";
+    oscillator.frequency.setValueAtTime(660, context.currentTime);
+    oscillator.frequency.setValueAtTime(880, context.currentTime + .12);
+
+    gain.gain.setValueAtTime(.12, context.currentTime);
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      context.currentTime + .28
+    );
+
+    oscillator.connect(gain);
+    gain.connect(context.destination);
+
+    oscillator.start();
+    oscillator.stop(context.currentTime + .28);
+
+    oscillator.onended = () => context.close();
+  } catch (error) {
+    // 音效無法播放時，不影響集點功能
+  }
+}
+
+/* ==============================
+   事件綁定與初始化
+================================ */
+
+$("addForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const input = $("studentName");
+
+  if (addStudent(input.value)) {
+    input.value = "";
+    input.focus();
+  }
+});
+
+$("exportBtn").addEventListener("click", exportCSV);
+$("clearBtn").addEventListener("click", clearAll);
+$("helpBtn").addEventListener("click", showHelp);
+
+loadData();
+renderAll();
+
+</script>
+
+</body>
+</html>
